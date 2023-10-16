@@ -26,6 +26,7 @@ const run = async () => {
   try {
     const flightDealsCollection = client.db('BanAir').collection('deals');
     const testimonialCollection = client.db('BanAir').collection('testimonials');
+    const usersCollection = client.db('BanAir').collection('users');
 
     console.log("DB Connected")
 
@@ -91,6 +92,30 @@ const run = async () => {
     app.get("/testimonial", async (req, res) => {
       const data = await testimonialCollection.find({}).toArray();
       res.send(data);
+    });
+
+
+    //Users
+
+    app.get("/users", async (req, res) => {
+      const data = await usersCollection.find({}).toArray();
+      res.send(data);
+    });
+
+    app.post('/users', async (req, res) => {
+      const name = req.body.name;
+      const email = req.body.email;
+      const phoneNumber = req.body.phoneNumber;
+      const role = "user"
+      const myReviews = [];
+      const myBookings = [];
+      const myCart = [];
+
+      const createdAt = new Date();
+      const newUser = { name, email, phoneNumber, role, createdAt, myReviews, myBookings, myCart }
+
+      const result = await usersCollection.insertOne(newUser);
+      res.send(result);
     });
 
 
