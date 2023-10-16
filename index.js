@@ -94,6 +94,12 @@ const run = async () => {
       res.send(data);
     });
 
+    app.post("/testimonial", async (req, res) => {
+      const newTestimonial = req.body;
+      const result = await testimonialCollection.insertOne(newTestimonial);
+      res.send(result);
+    });
+
 
     //Users
 
