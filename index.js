@@ -108,6 +108,14 @@ const run = async () => {
       res.send(data);
     });
 
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const result = await usersCollection.findOne({ email: email });
+      res.send(result);
+    });
+
+
+
     app.post('/users', async (req, res) => {
       const name = req.body.name;
       const email = req.body.email;
