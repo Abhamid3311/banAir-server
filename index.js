@@ -104,22 +104,6 @@ const run = async () => {
 
     //Users
 
-    app.get("/users", async (req, res) => {
-      const data = await usersCollection.find({}).toArray();
-      res.send(data);
-    });
-
-    app.get("/user/:email", async (req, res) => {
-      const email = req.params.email;
-      //console.log(email)
-      const result = await usersCollection.findOne({ email: email });
-     // console.log(result)
-     
-      res.send(result);
-    });
-
-
-
     app.post('/users', async (req, res) => {
       const name = req.body.name;
       const email = req.body.email;
@@ -135,6 +119,35 @@ const run = async () => {
       const result = await usersCollection.insertOne(newUser);
       res.send(result);
     });
+
+    app.get("/users", async (req, res) => {
+      const data = await usersCollection.find({}).toArray();
+      res.send(data);
+    });
+
+    app.get("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const result = await usersCollection.findOne({ email: email });
+      res.send(result);
+    });
+
+    app.get("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id)
+      const result = await usersCollection.findOne({ _id: ObjectId(id) });
+      console.log(result)
+      res.send(result);
+    });
+
+    app.delete('/user/:id', async (req, res) => {
+      const id = req.params.id;
+      const result = await usersCollection.deleteOne({ _id: ObjectId(id) });
+      res.send(result);
+    });
+
+
+
+
 
 
     //Bookings
@@ -177,80 +190,59 @@ const run = async () => {
 
 
 
-    //Comments
-    app.post('/comment/:id', async (req, res) => {
-      const productId = req.params.id;
-      const comment = req.body;
-
-      console.log(productId);
-      console.log(comment);
-
-      const result = await productsCollection.updateOne(
-        { _id: ObjectId(productId) },
-        { $push: { reviews: comment } }
-      );
-
-      console.log(result);
-
-      if (result.modifiedCount !== 1) {
-        console.error('Product not found or comment not added');
-        res.status(404).json({ error: 'Product not found or comment not added' });
-        return;
-      }
-
-      const updatedBook = await productsCollection.findOne({ _id: ObjectId(productId) });
-      console.log('Comment added successfully');
-      res.status(200).json({ message: 'Comment added successfully', updatedBook });
-
-
-    });
-
-
-    app.get('/comment/:id', async (req, res) => {
-      const productId = req.params.id;
-
-      try {
-        const result = await productsCollection.findOne(
-          { _id: ObjectId(productId) },
-          { projection: { _id: 0, reviews: 1 } }
-        );
-
-        if (result) {
-          res.json(result.reviews.reverse()); // Send the reviews array
-        } else {
-          res.status(404).json({ error: 'Product not found' });
-        }
-      } catch (error) {
-        console.error('Error retrieving comments', error);
-        res.status(500).json({ error: 'Server error' });
-      }
-    });
-
-
-
-
-    //Users
-
-    /*  app.post('/user', async (req, res) => {
-       const user = req.body;
+    /*  //Comments
+     app.post('/comment/:id', async (req, res) => {
+       const productId = req.params.id;
+       const comment = req.body;
  
-       const result = await userCollection.insertOne(user);
+       console.log(productId);
+       console.log(comment);
  
-       res.send(result);
-     });
+       const result = await productsCollection.updateOne(
+         { _id: ObjectId(productId) },
+         { $push: { reviews: comment } }
+       );
  
-     app.get('/user/:email', async (req, res) => {
-       const email = req.params.email;
+       console.log(result);
  
-       const result = await userCollection.findOne({ email });
- 
-       if (result?.email) {
-         return res.send({ status: true, data: result });
+       if (result.modifiedCount !== 1) {
+         console.error('Product not found or comment not added');
+         res.status(404).json({ error: 'Product not found or comment not added' });
+         return;
        }
  
-       res.send({ status: false });
+       const updatedBook = await productsCollection.findOne({ _id: ObjectId(productId) });
+       console.log('Comment added successfully');
+       res.status(200).json({ message: 'Comment added successfully', updatedBook });
+ 
+ 
+     });
+ 
+ 
+     app.get('/comment/:id', async (req, res) => {
+       const productId = req.params.id;
+ 
+       try {
+         const result = await productsCollection.findOne(
+           { _id: ObjectId(productId) },
+           { projection: { _id: 0, reviews: 1 } }
+         );
+ 
+         if (result) {
+           res.json(result.reviews.reverse()); // Send the reviews array
+         } else {
+           res.status(404).json({ error: 'Product not found' });
+         }
+       } catch (error) {
+         console.error('Error retrieving comments', error);
+         res.status(500).json({ error: 'Server error' });
+       }
      }); */
 
+
+
+
+   
 
 
   } finally {
