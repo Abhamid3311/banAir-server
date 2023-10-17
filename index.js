@@ -27,12 +27,13 @@ const run = async () => {
     const flightDealsCollection = client.db('BanAir').collection('deals');
     const testimonialCollection = client.db('BanAir').collection('testimonials');
     const usersCollection = client.db('BanAir').collection('users');
+    const bookingCollection = client.db('BanAir').collection('bookings');
 
     console.log("DB Connected")
 
 
 
-    //products APIs
+    //deal APIs
     app.get("/deal", async (req, res) => {
       const data = await flightDealsCollection.find({}).toArray();
       res.send(data);
@@ -108,9 +109,12 @@ const run = async () => {
       res.send(data);
     });
 
-    app.get("/users/:email", async (req, res) => {
+    app.get("/user/:email", async (req, res) => {
       const email = req.params.email;
+      //console.log(email)
       const result = await usersCollection.findOne({ email: email });
+     // console.log(result)
+     
       res.send(result);
     });
 
@@ -131,6 +135,33 @@ const run = async () => {
       const result = await usersCollection.insertOne(newUser);
       res.send(result);
     });
+
+
+    //Bookings
+
+    app.get("/bookings", async (req, res) => {
+      const data = await bookingCollection.find({}).toArray();
+      res.send(data);
+    });
+
+    app.get("/bookings/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await bookingCollection.findOne({ _id: ObjectId(id) });
+      res.send(result);
+    });
+
+    app.get("/bookings/:email", async (req, res) => {
+      const id = req.params.email;
+      const data = await bookingCollection.findOne({ email: email });
+      res.send(data);
+    });
+
+    app.post("/bookings", async (req, res) => {
+      const newBooking = req.body;
+      const result = await bookingCollection.insertOne(newBooking);
+      res.send(result);
+    });
+
 
 
 
