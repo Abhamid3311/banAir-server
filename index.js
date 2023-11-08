@@ -131,7 +131,7 @@ const run = async () => {
       res.send(result);
     });
 
-    app.get("/user/:id", async (req, res) => {
+    app.get("/users/:id", async (req, res) => {
       const id = req.params.id;
       console.log(id)
       const result = await usersCollection.findOne({ _id: ObjectId(id) });
@@ -139,7 +139,7 @@ const run = async () => {
       res.send(result);
     });
 
-    app.delete('/user/:id', async (req, res) => {
+    app.delete('/users/:id', async (req, res) => {
       const id = req.params.id;
       const result = await usersCollection.deleteOne({ _id: ObjectId(id) });
       res.send(result);
