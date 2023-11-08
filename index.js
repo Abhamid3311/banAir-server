@@ -94,10 +94,21 @@ const run = async () => {
       const data = await testimonialCollection.find({}).toArray();
       res.send(data);
     });
+    app.get('/testimonial/:id', async (req, res) => {
+      const id = req.params.id;
+      const result = await testimonialCollection.findOne({ _id: ObjectId(id) });
+      res.send(result);
+    });
 
     app.post("/testimonial", async (req, res) => {
       const newTestimonial = req.body;
       const result = await testimonialCollection.insertOne(newTestimonial);
+      res.send(result);
+    });
+
+    app.delete('/testimonial/:id', async (req, res) => {
+      const id = req.params.id;
+      const result = await testimonialCollection.deleteOne({ _id: ObjectId(id) });
       res.send(result);
     });
 
@@ -133,9 +144,9 @@ const run = async () => {
 
     app.get("/users/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id)
+      // console.log(id)
       const result = await usersCollection.findOne({ _id: ObjectId(id) });
-      console.log(result)
+      // console.log(result)
       res.send(result);
     });
 
