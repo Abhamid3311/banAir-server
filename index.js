@@ -33,9 +33,11 @@ const run = async () => {
 
 
 
-    //deal APIs
+    //! Packages APIs
     app.get("/deal", async (req, res) => {
-      const data = await flightDealsCollection.find({}).toArray();
+      const getData = await flightDealsCollection.find({}).toArray();
+      const data = [...getData].reverse();
+      // console.log(data)
       res.send(data);
     });
 
@@ -88,9 +90,11 @@ const run = async () => {
     //Testimonial
 
     app.get("/testimonial", async (req, res) => {
-      const data = await testimonialCollection.find({}).toArray();
+      const getData = await testimonialCollection.find({}).toArray();
+      const data = [...getData].reverse();
       res.send(data);
     });
+    
     app.get('/testimonial/:id', async (req, res) => {
       const id = req.params.id;
       const result = await testimonialCollection.findOne({ _id: ObjectId(id) });
@@ -161,7 +165,8 @@ const run = async () => {
     //Bookings
 
     app.get("/bookings", async (req, res) => {
-      const data = await bookingCollection.find({}).toArray();
+      const getData = await bookingCollection.find({}).toArray();
+      const data = [...getData].reverse();
       res.send(data);
     });
 
