@@ -47,15 +47,12 @@ const run = async () => {
     });
 
     app.post('/deal', async (req, res) => {
-      const title = req.body.title;
-      const author = req.body.author;
-      const genre = req.body.genre;
-      const publicationDate = req.body.publicationDate;
+      const package = req.body;
       const reviews = [];
       const createdAt = new Date();
-      const product = { title, author, genre, publicationDate, createdAt, reviews }
+      const newPackage = { ...package, createdAt, reviews }
 
-      const result = await flightDealsCollection.insertOne(book);
+      const result = await flightDealsCollection.insertOne(newPackage);
       res.send(result);
     });
 
