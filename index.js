@@ -94,7 +94,7 @@ const run = async () => {
       const data = [...getData].reverse();
       res.send(data);
     });
-    
+
     app.get('/testimonial/:id', async (req, res) => {
       const id = req.params.id;
       const result = await testimonialCollection.findOne({ _id: ObjectId(id) });
@@ -194,6 +194,31 @@ const run = async () => {
       res.send(result);
     });
 
+
+    app.put('/bookings/:id', async (req, res) => {
+      const id = req.params.id;
+      const { status } = req.body; // Destructure the status field
+
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: { status }, // Use the status field
+      };
+
+      try {
+        const result = await bookingCollection.updateOne({ _id: ObjectId(id) }, updateDoc, options);
+
+        if (result.modifiedCount !== 1) {
+          console.error('Booking not updated');
+          return res.status(404).json({ error: 'Booking not found' });
+        }
+
+        console.log('Booking updated successfully');
+        return res.status(200).json({ message: 'Booking updated successfully', result });
+      } catch (error) {
+        console.error('Error updating booking:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+    });
 
 
 
