@@ -64,26 +64,26 @@ const run = async () => {
       res.send(result);
     });
 
+
+
     app.put('/deal/:id', async (req, res) => {
       const id = req.params.id;
-      const product = req.body;
-      console.log(book)
+      const package = req.body;
+      console.log(package)
 
       const options = { upsert: true };
       const updateDoc = {
-        $set: product,
+        $set: package,
       };
-
       const result = await flightDealsCollection.updateOne({ _id: ObjectId(id) }, updateDoc, options);
 
-
       if (result.modifiedCount !== 1) {
-        console.error('product not Updated');
-        return res.status(404).json({ error: 'product not found' });
+        console.error('package not Updated');
+        return res.status(404).json({ error: 'package not found' });
       }
 
-      console.log('product Updated successfully');
-      return res.status(200).json({ message: 'product Updated successfully', result });
+      console.log('package Updated successfully');
+      return res.status(200).json({ message: 'package Updated successfully', result });
     });
 
 
@@ -195,24 +195,21 @@ const run = async () => {
     });
 
 
+    //Update booking Status
     app.put('/bookings/:id', async (req, res) => {
       const id = req.params.id;
-      const { status } = req.body; // Destructure the status field
+      const { status } = req.body;
 
       const options = { upsert: true };
       const updateDoc = {
-        $set: { status }, // Use the status field
+        $set: { status },
       };
 
       try {
         const result = await bookingCollection.updateOne({ _id: ObjectId(id) }, updateDoc, options);
-
         if (result.modifiedCount !== 1) {
-          console.error('Booking not updated');
           return res.status(404).json({ error: 'Booking not found' });
         }
-
-        console.log('Booking updated successfully');
         return res.status(200).json({ message: 'Booking updated successfully', result });
       } catch (error) {
         console.error('Error updating booking:', error);
